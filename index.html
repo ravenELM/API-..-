@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apfel API - Card Events</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Modal for API Response -->
+    <div id="apiResponseModal" class="modal" aria-hidden="true" role="dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="apiResponseModalLabel"></h5>
+                <button class="modal-close" aria-label="Close modal">×</button>
+            </div>
+            <div class="modal-body">
+                <p id="apiResponseModalDesc" class="text-muted"></p>
+                <div id="apiQueryInputContainer"></div>
+                <button id="submitQueryBtn" class="console-btn d-none">Submit</button>
+                <pre id="apiResponseContent" class="d-none"></pre>
+                <p id="apiEndpoint" class="d-none"></p>
+                <button id="copyEndpointBtn" class="console-btn copy-btn d-none" aria-label="Copy API endpoint URL">Copy API</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="banner">
+        <img src="Document.png" alt="Banner" class="banner-image">
+    </div>
+
+    <div id="main-content">
+        <!-- Navbar -->
+        <div class="navbar">
+            <div class="avatar">
+                <h3>Apfel API</h3>
+            </div>
+        </div>
+
+        <div id="tables-container">
+            <div class="table-container">
+                <div class="data-category">
+                    <h5><i class="fa-solid fa-layer-group"></i> General</h5>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th scope="col">Route</th>
+                                <th scope="col">Method</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Try</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>/cards</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/cards')">Try</button></td>
+                            </tr>
+                            <tr>
+                                <td>/randomcard</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/randomcard')">Try</button></td>
+                            </tr>
+                            <tr>
+                                <td>/cardtier</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/cardtier')">Try</button></td>
+                            </tr>
+                            <tr>
+                                <td>/cardid?id=...</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/cardid')">Try</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <div class="data-category">
+                    <h5><i class="fa-solid fa-layer-group"></i> Christmas Event</h5>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th scope="col">Route</th>
+                                <th scope="col">Method</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Try</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>/winter-cards/cards</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/winter-cards/cards')">Try</button></td>
+                            </tr>
+                            <tr>
+                                <td>/winter-cards/randomcard</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/winter-cards/randomcard')">Try</button></td>
+                            </tr>
+                            <tr>
+                                <td>/winter-cards/cardtier</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/winter-cards/cardtier')">Try</button></td>
+                            </tr>
+                            <tr>
+                                <td>/winter-cards/cardid?id=...</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/winter-cards/cardid')">Try</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <div class="data-category">
+                    <h5><i class="fa-solid fa-layer-group"></i> Summer Event</h5>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th scope="col">Route</th>
+                                <th scope="col">Method</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Try</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>/summer-cards/cards</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/summer-cards/cards')">Try</button></td>
+                            </tr>
+                            <tr>
+                                <td>/summer-cards/randomcard</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/summer-cards/randomcard')">Try</button></td>
+                            </tr>
+                            <tr>
+                                <td>/summer-cards/cardtier</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/summer-cards/cardtier')">Try</button></td>
+                            </tr>
+                            <tr>
+                                <td>/summer-cards/cardid?id=...</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/summer-cards/cardid')">Try</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <div class="data-category">
+                    <h5><i class="fa-solid fa-layer-group"></i> Halloween Event</h5>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th scope="col">Route</th>
+                                <th scope="col">Method</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Try</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>/halloween-cards/cards</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/halloween-cards/cards')">Try</button></td>
+                            </tr>
+                            <tr>
+                                <td>/halloween-cards/randomcard</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/halloween-cards/randomcard')">Try</button></td>
+                            </tr>
+                            <tr>
+                                <td>/halloween-cards/cardtier</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/halloween-cards/cardtier')">Try</button></td>
+                            </tr>
+                            <tr>
+                                <td>/halloween-cards/cardid?id=...</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/halloween-cards/cardid')">Try</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <div class="data-category">
+                    <h5><i class="fa-solid fa-layer-group"></i> Chinese New Year Event</h5>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th scope="col">Route</th>
+                                <th scope="col">Method</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Try</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>/chinese-new-year-cards/cards</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/chinese-new-year-cards/cards')">Try</button></td>
+                            </tr>
+                            <tr>
+                                <td>/chinese-new-year-cards/randomcard</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/chinese-new-year-cards/randomcard')">Try</button></td>
+                            </tr>
+                            <tr>
+                                <td>/chinese-new-year-cards/cardtier</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/chinese-new-year-cards/cardtier')">Try</button></td>
+                            </tr>
+                            <tr>
+                                <td>/chinese-new-year-cards/cardid?id=...</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/chinese-new-year-cards/cardid')">Try</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <div class="data-category">
+                    <h5><i class="fa-solid fa-layer-group"></i> Valentines Day Event</h5>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th scope="col">Route</th>
+                                <th scope="col">Method</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Try</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>/valentines-day-cards/cards</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/valentines-day-cards/cards')">Try</button></td>
+                            </tr>
+                            <tr>
+                                <td>/valentines-day-cards/randomcard</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/valentines-day-cards/randomcard')">Try</button></td>
+                            </tr>
+                            <tr>
+                                <td>/valentines-day-cards/cardtier</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/valentines-day-cards/cardtier')">Try</button></td>
+                            </tr>
+                            <tr>
+                                <td>/valentines-day-cards/cardid?id=...</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/valentines-day-cards/cardid')">Try</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <div class="data-category">
+                    <h5><i class="fa-solid fa-layer-group"></i> Easter Event</h5>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th scope="col">Route</th>
+                                <th scope="col">Method</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Try</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>/easter-cards/cards</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/easter-cards/cards')">Try</button></td>
+                            </tr>
+                            <tr>
+                                <td>/easter-cards/randomcard</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/easter-cards/randomcard')">Try</button></td>
+                            </tr>
+                            <tr>
+                                <td>/easter-cards/cardtier</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/easter-cards/cardtier')">Try</button></td>
+                            </tr>
+                            <tr>
+                                <td>/easter-cards/cardid?id=...</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/easter-cards/cardid')">Try</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <div class="data-category">
+                    <h5><i class="fa-solid fa-layer-group"></i> My Hero Academia CCG Event</h5>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th scope="col">Route</th>
+                                <th scope="col">Method</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Try</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>/my-hero-academia-ccg-cards/cards</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/my-hero-academia-ccg-cards/cards')">Try</button></td>
+                            </tr>
+                            <tr>
+                                <td>/my-hero-academia-ccg-cards/randomcard</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/my-hero-academia-ccg-cards/randomcard')">Try</button></td>
+                            </tr>
+                            <tr>
+                                <td>/my-hero-academia-ccg-cards/cardtier</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/my-hero-academia-ccg-cards/cardtier')">Try</button></td>
+                            </tr>
+                            <tr>
+                                <td>/my-hero-academia-ccg-cards/cardid?id=...</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/my-hero-academia-ccg-cards/cardid')">Try</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <div class="data-category">
+                    <h5><i class="fa-solid fa-layer-group"></i> Maid Day Event</h5>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th scope="col">Route</th>
+                                <th scope="col">Method</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Try</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>/maid-day-cards/cards</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/maid-day-cards/cards')">Try</button></td>
+                            </tr>
+                            <tr>
+                                <td>/maid-day-cards/randomcard</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/maid-day-cards/randomcard')">Try</button></td>
+                            </tr>
+                            <tr>
+                                <td>/maid-day-cards/cardtier</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/maid-day-cards/cardtier')">Try</button></td>
+                            </tr>
+                            <tr>
+                                <td>/maid-day-cards/cardid?id=...</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/maid-day-cards/cardid')">Try</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <div class="data-category">
+                    <h5><i class="fa-solid fa-layer-group"></i> Gala Event</h5>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th scope="col">Route</th>
+                                <th scope="col">Method</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Try</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>/gala-cards/cards</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/gala-cards/cards')">Try</button></td>
+                            </tr>
+                            <tr>
+                                <td>/gala-cards/randomcard</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/gala-cards/randomcard')">Try</button></td>
+                            </tr>
+                            <tr>
+                                <td>/gala-cards/cardtier</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/gala-cards/cardtier')">Try</button></td>
+                            </tr>
+                            <tr>
+                                <td>/gala-cards/cardid?id=...</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/gala-cards/cardid')">Try</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <div class="data-category">
+                    <h5><i class="fa-solid fa-layer-group"></i> Sworn Event</h5>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th scope="col">Route</th>
+                                <th scope="col">Method</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Try</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>/sworn-cards/cards</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/sworn-cards/cards')">Try</button></td>
+                            </tr>
+                            <tr>
+                                <td>/sworn-cards/randomcard</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/sworn-cards/randomcard')">Try</button></td>
+                            </tr>
+                            <tr>
+                                <td>/sworn-cards/cardtier</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/sworn-cards/cardtier')">Try</button></td>
+                            </tr>
+                            <tr>
+                                <td>/sworn-cards/cardid?id=...</td>
+                                <td>GET</td>
+                                <td><span class="status online">Online</span></td>
+                                <td><button class="try-btn" onclick="openEndpoint('/sworn-cards/cardid')">Try</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <footer>
+                © 2025, Created by Raven
+            </footer>
+        </div>
+
+        <div class="disc">
+            <div class="disc_cover"></div>
+        </div>
+
+        <audio id="music" src="music.mp3"></audio>
+
+        <script src="script.js"></script>
+        <script>
+            const devtoolsDetector = setInterval(() => {
+                const threshold = 160;
+                if (window.outerWidth - window.innerWidth > threshold || window.outerHeight - window.innerHeight > threshold) {
+                    document.body.innerHTML = `<center>Simply Close Dev Tools 🗿</center>`;
+                    clearInterval(devtoolsDetector);
+                }
+            }, 200);
+            const erudaCheck = () => {
+                if (typeof eruda !== 'undefined') {
+                    document.body.innerHTML = `<center>Please Don't Be Stubborn</center>`;
+                } else {
+                    setTimeout(erudaCheck, 1000);
+                }
+            };
+            erudaCheck();
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+    </div>
+</body>
+</html>
