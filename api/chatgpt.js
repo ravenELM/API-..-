@@ -1,4 +1,4 @@
-nmodule.exports = async (req, res) => {
+module.exports = async (req, res) => {
     const { q, prompt } = req.query;
 
     if (!q) {
