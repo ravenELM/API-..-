@@ -1,7 +1,7 @@
 // script.js
 
 function openEndpoint(endpoint) {
-    const baseUrl = 'https://apfel-api-raven.vercel.app';
+    const baseUrl = 'https://apfel-api-nova.onrender.com/';
     const url = baseUrl + endpoint;
     window.open(url, '_blank');
 }
