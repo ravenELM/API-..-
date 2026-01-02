@@ -90,6 +90,11 @@ app.get('/profile', (req, res) => {
   res.json({ email: req.session.user.email, apiKey: req.session.user.apiKey });
 });
 
+app.get('/user', (req, res) => {
+  if (!req.session.user) return res.redirect('/');
+  res.sendFile(path.join(__dirname, 'user.html'));
+});
+
 // Import API handlers directly
 const cards = require('./api/cards.js');
 const randomcard = require('./api/randomcard.js');

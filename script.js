@@ -10,11 +10,24 @@ function openEndpoint(endpoint) {
 const joinUsBtn = document.getElementById('joinUsBtn');
 const loginModal = document.getElementById('loginModal');
 const authForm = document.getElementById('authForm');
-const profileMenu = document.getElementById('profileMenu');
-const copyApiKeyBtn = document.getElementById('copyApiKeyBtn');
 const profileImg = document.getElementById('profileImg');
 const modalTitle = document.getElementById('modalTitle');
 const submitBtn = document.getElementById('submitBtn');
+
+// Check if logged in on page load
+async function checkLogin() {
+    try {
+        const response = await fetch('/profile');
+        if (response.ok) {
+            joinUsBtn.style.display = 'none';
+            profileImg.style.display = 'block';
+        }
+    } catch (error) {
+        // Not logged in
+    }
+}
+
+checkLogin();
 
 joinUsBtn.addEventListener('click', () => {
     loginModal.style.display = 'block';
@@ -98,16 +111,12 @@ function clearErrors() {
 
 function showProfile(apiKey) {
     joinUsBtn.style.display = 'none';
-    profileMenu.style.display = 'block';
-    copyApiKeyBtn.onclick = async () => {
-        try {
-            await navigator.clipboard.writeText(apiKey);
-            alert('API Key copied to clipboard!');
-        } catch (err) {
-            alert('Failed to copy API Key. Please copy manually: ' + apiKey);
-        }
-    };
+    profileImg.style.display = 'block';
 }
+
+profileImg.addEventListener('click', () => {
+    window.location = '/user';
+});
 
 // Music player
 const disc = document.querySelector('.disc');

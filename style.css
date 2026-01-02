@@ -77,6 +77,13 @@ body {
     align-items: flex-start;
 }
 
+.profile-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
 .avatar h3 {
     color: #007bff;
     font-family: 'Share Tech Mono', monospace;
@@ -344,43 +351,6 @@ footer a {
 
 .join-us-btn:hover {
     background-color: #0056b3;
-}
-
-.navbar {
-    position: relative;
-}
-
-.profile-menu {
-    position: absolute;
-    top: 60px;
-    right: 10px;
-    background: white;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    padding: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-
-.profile-img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    cursor: pointer;
-}
-
-.copy-btn {
-    display: block;
-    margin-top: 10px;
-    background-color: #151717;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.copy-btn:hover {
-    background-color: #2d79f3;
 }
 
 .form {

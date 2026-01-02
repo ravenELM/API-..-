@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - Apfel API</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-left">
+            <div class="avatar">
+                <h3>Apfel API</h3>
+            </div>
+        </div>
+        <div id="profileMenu">
+            <img id="profileImg" src="default.png" alt="Profile" class="profile-img">
+        </div>
+    </div>
+
+    <div id="user-content">
+        <h2>User Profile</h2>
+        <p><strong>Email:</strong> <span id="userEmail"></span></p>
+        <p><strong>API Key:</strong> <span id="userApiKey"></span> <button id="copyApiKeyBtn">Copy</button></p>
+        <p><strong>Requests Today:</strong> <span id="requestsToday">0</span></p>
+        <button id="logoutBtn">Logout</button>
+    </div>
+
+    <script>
+        async function loadProfile() {
+            try {
+                const response = await fetch('/profile');
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('userEmail').textContent = data.email;
+                    document.getElementById('userApiKey').textContent = data.apiKey;
+                } else {
+                    window.location = '/';
+                }
+            } catch (error) {
+                window.location = '/';
+            }
+        }
+
+        document.getElementById('copyApiKeyBtn').addEventListener('click', () => {
+            const apiKey = document.getElementById('userApiKey').textContent;
+            navigator.clipboard.writeText(apiKey).then(() => alert('API Key copied!'));
+        });
+
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            await fetch('/logout', { method: 'POST' });
+            window.location = '/';
+        });
+
+        document.getElementById('profileImg').addEventListener('click', () => {
+            // Already on user page
+        });
+
+        loadProfile();
+    </script>
+</body>
+</html>
