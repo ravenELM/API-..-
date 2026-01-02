@@ -1,14 +1,94 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const bcrypt = require('bcryptjs');
+const session = require('express-session');
+const crypto = require('crypto');
+const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 6969;
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname));
 
-// No API key required
+// Session setup
+app.use(session({
+  secret: 'your-secret-key', // Change to a secure key
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false } // Set to true if using HTTPS
+}));
+
+// Rate limiter: 40 requests per hour per API key
+// const rateLimiter = new RateLimiterMemory({
+//   keyPrefix: 'api',
+//   points: 40, // Number of requests
+//   duration: 60 * 60, // Per hour
+// });
+
+// Middleware to check API key for API routes
+const requireApiKey = async (req, res, next) => {
+  const apiKey = req.query.api_key;
+  if (!apiKey) {
+    return res.status(401).json({ error: 'API key required' });
+  }
+
+  const users = JSON.parse(fs.readFileSync(path.join(__dirname, 'users.json'), 'utf8'));
+  const user = users.find(u => u.apiKey === apiKey);
+  if (!user) {
+    return res.status(401).json({ error: 'Invalid API key' });
+  }
+
+  // Rate limiting
+  // try {
+  //   await rateLimiter.consume(apiKey);
+  //   req.user = user;
+  //   next();
+  // } catch (rejRes) {
+  //   res.status(429).json({ error: 'Too many requests. Limit: 40 per hour' });
+  // }
+  req.user = user;
+  next();
+};
+
+// Auth routes
+app.post('/register', async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) return res.status(400).json({ error: 'Email and password required' });
+
+  const users = JSON.parse(fs.readFileSync(path.join(__dirname, 'users.json'), 'utf8'));
+  if (users.find(u => u.email === email)) return res.status(400).json({ error: 'User already exists' });
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const apiKey = crypto.randomBytes(32).toString('hex');
+  const newUser = { email, password: hashedPassword, apiKey };
+  users.push(newUser);
+  fs.writeFileSync(path.join(__dirname, 'users.json'), JSON.stringify(users, null, 2));
+  res.json({ message: 'User registered', apiKey });
+});
+
+app.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+  const users = JSON.parse(fs.readFileSync(path.join(__dirname, 'users.json'), 'utf8'));
+  const user = users.find(u => u.email === email);
+  if (!user || !(await bcrypt.compare(password, user.password))) {
+    return res.status(401).json({ error: 'Invalid credentials' });
+  }
+  req.session.user = user;
+  res.json({ message: 'Logged in', apiKey: user.apiKey });
+});
+
+app.post('/logout', (req, res) => {
+  req.session.destroy();
+  res.json({ message: 'Logged out' });
+});
+
+app.get('/profile', (req, res) => {
+  if (!req.session.user) return res.status(401).json({ error: 'Not logged in' });
+  res.json({ email: req.session.user.email, apiKey: req.session.user.apiKey });
+});
 
 // Import API handlers directly
 const cards = require('./api/cards.js');
@@ -29,24 +109,24 @@ const tiktok = require('./api/tiktok.js');
 const twitter = require('./api/twitter.js');
 const youtube = require('./api/youtube.js');
 
-// Wrap each handler into Express endpoints
-app.all('/cards', cards);
-app.all('/randomcard', randomcard);
-app.all('/cardtier', cardtier);
-app.all('/cardid', cardid);
-app.all('/chatgpt', chatgpt);
-app.all('/cohere', cohere);
-app.all('/copilot', copilot);
-app.all('/enhance', enhance);
-app.all('/facebook', facebook);
-app.all('/igdl', igdl);
-app.all('/imagen3', imagen3);
-app.all('/musicapple', musicapple);
-app.all('/nsfw', nsfw);
-app.all('/spotify', spotify);
-app.all('/tiktok', tiktok);
-app.all('/twitter', twitter);
-app.all('/youtube', youtube);
+// Wrap each handler into Express endpoints with API key check
+app.all('/cards', requireApiKey, cards);
+app.all('/randomcard', requireApiKey, randomcard);
+app.all('/cardtier', requireApiKey, cardtier);
+app.all('/cardid', requireApiKey, cardid);
+app.all('/chatgpt', requireApiKey, chatgpt);
+app.all('/cohere', requireApiKey, cohere);
+app.all('/copilot', requireApiKey, copilot);
+app.all('/enhance', requireApiKey, enhance);
+app.all('/facebook', requireApiKey, facebook);
+app.all('/igdl', requireApiKey, igdl);
+app.all('/imagen3', requireApiKey, imagen3);
+app.all('/musicapple', requireApiKey, musicapple);
+app.all('/nsfw', requireApiKey, nsfw);
+app.all('/spotify', requireApiKey, spotify);
+app.all('/tiktok', requireApiKey, tiktok);
+app.all('/twitter', requireApiKey, twitter);
+app.all('/youtube', requireApiKey, youtube);
 
 // Define events
 const events = [
@@ -120,9 +200,9 @@ const createEventRouter = (fileName) => {
     return router;
 };
 
-// Add routes for each event
+// Add routes for each event with API key
 events.forEach(event => {
-    app.use(`/${event.route}`, createEventRouter(event.file));
+    app.use(`/${event.route}`, requireApiKey, createEventRouter(event.file));
 });
 
 // Default route
