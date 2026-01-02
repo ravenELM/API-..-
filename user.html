@@ -18,12 +18,26 @@
         </div>
     </div>
 
-    <div id="user-content">
-        <h2>User Profile</h2>
-        <p><strong>Email:</strong> <span id="userEmail"></span></p>
-        <p><strong>API Key:</strong> <span id="userApiKey"></span> <button id="copyApiKeyBtn">Copy</button></p>
-        <p><strong>Requests Today:</strong> <span id="requestsToday">0</span></p>
-        <button id="logoutBtn">Logout</button>
+    <div class="profile-container">
+        <div class="profile-header">
+            <img src="default.png" alt="Profile Picture" class="profile-avatar">
+            <div class="profile-info">
+                <h1 id="userEmail">User</h1>
+                <p>API User</p>
+            </div>
+        </div>
+        <div class="profile-details">
+            <div class="detail-item">
+                <strong>API Key:</strong> <span id="userApiKey"></span>
+                <button id="copyApiKeyBtn" class="btn">Copy API Key</button>
+            </div>
+            <div class="detail-item">
+                <strong>Requests Today:</strong> <span id="requestsToday">0</span>
+            </div>
+            <div class="detail-item">
+                <button id="logoutBtn" class="btn btn-danger">Logout</button>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -50,10 +64,6 @@
         document.getElementById('logoutBtn').addEventListener('click', async () => {
             await fetch('/logout', { method: 'POST' });
             window.location = '/';
-        });
-
-        document.getElementById('profileImg').addEventListener('click', () => {
-            // Already on user page
         });
 
         loadProfile();

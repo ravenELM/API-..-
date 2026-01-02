@@ -21,6 +21,7 @@ async function checkLogin() {
         if (response.ok) {
             joinUsBtn.style.display = 'none';
             profileImg.style.display = 'block';
+            document.getElementById('apiTester').style.display = 'block';
         }
     } catch (error) {
         // Not logged in
@@ -116,6 +117,17 @@ function showProfile(apiKey) {
 
 profileImg.addEventListener('click', () => {
     window.location = '/user';
+});
+
+document.getElementById('testApiBtn').addEventListener('click', () => {
+    const apiKey = document.getElementById('apiKeyInput').value;
+    const endpoint = document.getElementById('endpointInput').value;
+    if (apiKey && endpoint) {
+        const url = `${baseUrl}${endpoint}?api_key=${apiKey}`;
+        window.open(url, '_blank');
+    } else {
+        alert('Please enter API key and endpoint');
+    }
 });
 
 // Music player

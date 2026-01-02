@@ -475,6 +475,80 @@ footer a {
     border: 1px solid #2d79f3;
 }
 
+.api-tester {
+    margin: 20px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.api-tester input {
+    margin: 10px;
+    padding: 10px;
+    width: 200px;
+}
+
+.api-tester button {
+    padding: 10px 20px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.api-tester button:hover {
+    background: #0056b3;
+}
+
+.profile-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.profile-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+.profile-info h1 {
+    margin: 0;
+    color: #007bff;
+}
+
+.profile-details {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-danger {
+    background: #dc3545;
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #c82333;
+}
+
 .error-message {
     color: #dc3545;
     font-size: 12px;
